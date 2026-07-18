@@ -24,3 +24,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Namma plan"
 include(":app")
+include(":learningbydoing")
