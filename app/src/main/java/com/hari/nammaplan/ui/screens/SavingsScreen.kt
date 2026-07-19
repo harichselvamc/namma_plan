@@ -29,7 +29,6 @@ fun SavingsScreen(modifier: Modifier= Modifier){
     var targetAmount by remember { mutableStateOf("") }
     var alreadySavedamount by remember { mutableStateOf("") }
     var eventDate by remember { mutableStateOf("") }
-    var  calculateButton by remember { mutableStateOf(false) }
     var resultMessage by remember { mutableStateOf("")
     }
     Column(modifier = modifier.padding(16.dp)) {
@@ -119,30 +118,39 @@ fun SavingsScreen(modifier: Modifier= Modifier){
         Button(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                val targetvalue=targetAmount.toDoubleOrNull()
-                resultMessage = when{
-                    targetvalue==null->
+                val targetValue = targetAmount.toDoubleOrNull()
+                val savedamountvalue=alreadySavedamount.toDoubleOrNull()
+
+                resultMessage = when {
+                    targetValue == null ->
                         "Please enter a valid target amount"
 
-                    }else if(0>=targetvalue){
-                        Text("Target amount must be greater than zero")
+                    targetValue <= 0 ->
+                        "Target amount must be greater than zero"
 
-                    }else{
-                        Text(
-                            text = "Valid target amount $targetvalue"
-                        )
+                    savedamountvalue==null->
+                        "Please enter valid saved amount"
+                    savedamountvalue<0 ->
+                        "already saved amount cannot be negative"
+                    savedamountvalue>targetValue->
+                        "already saved amount cannot be greater than target amount"
+                    else -> {
+                        val balanceAmount = targetValue - savedamountvalue
+                        if (balanceAmount == 0.0) {
+                            "Goal already completed"
+                        } else {
+                            "Balance amount: $balanceAmount"
+                        }
 
                     }
-                }
-                }
-            ,
-            content = {
-                Text(
-                    text = "Calculate plan"
-                )
-            }
 
-        )
+                }
+            }
+        ) {
+            Text(
+                text = "Calculate Plan"
+            )
+        }
 
 
 
